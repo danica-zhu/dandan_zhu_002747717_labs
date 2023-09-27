@@ -19,10 +19,11 @@ public class ViewJPanel extends javax.swing.JPanel {
      * Creates new form ViewJPanel
      */
     VitalSignHistory history;
+    
     public ViewJPanel(VitalSignHistory history) {
         initComponents();
         this.history = history;
-        populateTable();
+        populateTable();// show the data in the table
     }
 
     /**
@@ -160,21 +161,25 @@ public class ViewJPanel extends javax.swing.JPanel {
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
-        int selectedRowIndex = tblVitals.getSelectedRow();
+        int selectedRowIndex = tblVitals.getSelectedRow(); //get the row which is selected
         
+        //notify user if none of the row is selected
         if (selectedRowIndex<0) {
             JOptionPane.showMessageDialog(this, "Please select a row to delete.");
             return;
         }
         
         DefaultTableModel model = (DefaultTableModel) tblVitals.getModel();
-        VitalSigns selectedVitals = (VitalSigns) model.getValueAt(selectedRowIndex, 0);
+        model.getValueAt(selectedRowIndex, 0);
+        VitalSigns selectedVital = (VitalSigns) model.getValueAt(selectedRowIndex, 0);
         
-        history.deleteVitals(selectedVitals);
+        history.deleteVitals(selectedVital);
         
+        //notify user about deleted successfully
         JOptionPane.showMessageDialog(this, "Vital signs deleted.");
         
-        populateTable();
+        populateTable();//refresh table
+        
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewActionPerformed
@@ -185,14 +190,10 @@ public class ViewJPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Please select a row to view.");
             return;
         }
-        
 
         DefaultTableModel model = (DefaultTableModel) tblVitals.getModel();
-        txtDate.setText("dsadas1");
-        VitalSigns selectedVitals = (VitalSigns) model.getValueAt(0, 0);
+        VitalSigns selectedVitals = (VitalSigns) model.getValueAt(selectedRowIndex, 0);
 
-//        VitalSigns selectedVitals = (VitalSigns) model.getValueAt(selectedRowIndex, 0);
-        txtDate.setText("dsadas2");
         
         txtTemperature.setText(String.valueOf(selectedVitals.getTemperature()));
         txtPressure.setText(String.valueOf(selectedVitals.getBloodPressure()));
@@ -225,7 +226,7 @@ public class ViewJPanel extends javax.swing.JPanel {
         for (VitalSigns vs : history.getHistory()) {
             
             Object[] row = new Object[3];
-            row[0] = vs.getDate();
+            row[0] = vs;
             row[1] = vs.getTemperature();
             row[2] = vs.getPulse();
             
